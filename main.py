@@ -20,7 +20,7 @@ def normalize(data_x, data_y):
     y_norm = data_y / max_y
 
 
-    return X_norm, y_norm
+    return X_norm, y_norm, max_y
 
 
 def make_train_val_data(csv_path):
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     base = os.getcwd()
     csv_path = os.path.join(base, 'dataset.csv')
     X, y = make_train_val_data(csv_path)
-    X_norm, y_norm = normalize(X, y)
+    X_norm, y_norm, max_y = normalize(X, y)
     X_train, X_val, y_train, y_val = train_test_split(X_norm, y_norm, test_size=0.1, random_state=42)
 
     args = parse_arguments()
@@ -151,15 +151,15 @@ if __name__ == "__main__":
         if args.model == 'svr':
             filepath = os.path.join(base, 'models/svr_model.sav')
             svr_model = joblib.load(filepath)
-            print(svr_model.predict(X_val))
+            print(svr_model.predict(X_val) * max_y)
         elif args.model == 'nn_1':
             filepath = os.path.join(base, 'models/ppi_model_1_layers.h5')
             nn_1_model = keras.models.load_model(filepath)
-            print(nn_1_model.predict(X_val))
+            print(nn_1_model.predict(X_val) * max_y)
         elif args.model == 'nn_2':
             filepath = os.path.join(base, 'models/ppi_model_2_layers.h5')
             nn_2_model = keras.models.load_model(filepath)
-            print(nn_2_model.predict(X_val))
+            print(nn_2_model.predict(X_val) * max_y)
 
             a=0
     
